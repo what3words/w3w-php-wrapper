@@ -78,3 +78,4 @@ class What3words
 	}
 
 }
+
