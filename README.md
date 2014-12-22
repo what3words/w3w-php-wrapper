@@ -1,6 +1,6 @@
 #what3words php-wrapper
 
-PHP wrapper for the what3words API
+Use the what3words API in your PHP site (see http://what3words.com/api/reference)
 
 ## Functions
 
