@@ -24,3 +24,30 @@ And returns
 ### setLanguage($language)
 This function sets the classes' language, and takes a 2 letter language string:
 - `setLanguage('fr');`
+
+## Code examples
+
+### Get 3 words
+
+```php
+<?php
+
+$w3w = new What3words;
+$result = $w3w->wordsToPosition('table.book.chair');
+print_r($result);
+
+?>
+```
+
+### Get position
+
+```php
+<?php
+
+$w3w = new What3words;
+$result = $w3w->positionToWords('51.484463, -0.195405');
+print_r($result);
+
+?>
+```
+
