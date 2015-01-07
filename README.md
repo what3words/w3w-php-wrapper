@@ -7,7 +7,7 @@ Use the what3words API in your PHP site (see http://what3words.com/api/reference
 ### wordsToPosition($words);
 This function takes either:
 - a string of 3 words `'table.book.chair'`
-- or an array of 3 words `['table', 'book', 'chair']`
+- an array of 3 words `['table', 'book', 'chair']`
 - a oneword `'*BobsHouse'`
 
 And returns
@@ -16,7 +16,7 @@ And returns
 ### positionToWords($position);
 This function takes either:
 - a string of 2 positions `'0.1234, 1.5678'`
-- or an array of 2 positions `[0.1234, 1.5678]`
+- an array of 2 positions `[0.1234, 1.5678]`
 
 And returns
 - an array of 3 words `['table', 'book', 'chair']`
