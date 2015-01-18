@@ -2,7 +2,7 @@
 
 class What3words
 {
-	const API_KEY = 'EMZ3EKSY'; 	// Change to your what3words API key
+	const API_KEY = 'YOURAPIKEY'; 	// Change to your what3words API key
 	private $language = 'en'; 	// Change to your default language
 
 	// --
