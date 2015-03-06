@@ -8,7 +8,6 @@ Use the what3words API in your PHP site (see http://developer.what3words.com/api
 This function takes either:
 - a string of 3 words `'table.book.chair'`
 - an array of 3 words `['table', 'book', 'chair']`
-- a oneword `'*BobsHouse'`
 
 And returns
 - an array of 2 coordinates `[0.1234, 1.5678]`
