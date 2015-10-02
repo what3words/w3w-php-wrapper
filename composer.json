@@ -1,0 +1,12 @@
+{
+    "name": "what3words/w3w-php-wrapper",
+    "description": "PHP wrapper for the what3words API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "what3words",
+            "email": "support@what3words.com"
+        }
+    ],
+    "require": {}
+}
