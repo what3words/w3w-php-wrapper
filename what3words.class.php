@@ -2,23 +2,33 @@
 
 class what3words
 {
-	const API_KEY = 'YOURAPIKEY'; 	// Change to your what3words API key
-	private $language = 'en'; 	// Change to your default language
+	private $apiKey;
+	private $language;
 
-	// --
-
-	public function __construct($language = null)
+	/**
+	 * @param string $apiKey
+	 * @param string $language
+	 */
+	public function __construct($apiKey, $language = 'en')
 	{
+		$this->apiKey = $apiKey;
 		$this->setLanguage($language);
 	}
 
+	/**
+	 * Send a POST request to the API
+	 *
+	 * @param string $url
+	 * @param array $data
+	 * @return array
+	 */
 	private function postRequest($url, $data = array())
 	{
-		$ch = curl_init('http://api.what3words.com/' . $url);
-		$data['key'] = self::API_KEY;
+		$ch = curl_init('https://api.what3words.com/' . $url);
+		$data['key'] = $this->apiKey;
 		$data['lang'] = $this->language;
 
-		curl_setopt($ch, CURLOPT_POST, count($data));
+		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -30,10 +40,10 @@ class what3words
 		return $return;
 	}
 
-	// --
-
 	/**
 	 * Sets the language in which to return words
+	 *
+	 * @param string $language
 	 */
 	public function setLanguage($language)
 	{
@@ -45,17 +55,22 @@ class what3words
 	 * Convert 3 words or OneWord into position
 	 * Takes words either as string, or array of words
 	 * Returns array of [lat, long]
+	 *
+	 * @param string|array $words
+	 * @return array
+	 * @throws Exception
 	 */
-
 	public function wordsToPosition($words)
 	{
-		if (is_array($words))
+		if (is_array($words)) {
 			$words = implode('.', $words);
-		elseif (!is_string($words))
+		}
+		elseif (!is_string($words)) {
 			throw new Exception('Invalid words passed');
+		}
 
 		$data = array('string' => $words);
-		$return = self::postRequest('w3w', $data);
+		$return = $this->postRequest('w3w', $data);
 		return $return['position'];
 	}
 
@@ -63,17 +78,22 @@ class what3words
 	 * Convert a position into 3 words
 	 * Takes position either as string, or array of 2 values
 	 * Returns array of [word1, word2, word3]
+	 *
+	 * @param string|array $position
+	 * @return array
+	 * @throws Exception
 	 */
-
 	public function positionToWords($position)
 	{
-		if (is_array($position))
+		if (is_array($position)) {
 			$position = implode(',', $position);
-		elseif (!is_string($position))
+		}
+		elseif (!is_string($position)) {
 			throw new Exception('Invalid position passed');
+		}
 
 		$data = array('position' => $position);
-		$return = self::postRequest('position', $data);
+		$return = $this->postRequest('position', $data);
 		return $return['words'];
 	}
 
