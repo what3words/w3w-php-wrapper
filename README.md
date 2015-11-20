@@ -26,7 +26,7 @@ This function sets the classes' language, and takes a 2 letter language string:
 
 ## Code examples
 
-### Get 3 words
+### Get a position for 3 words
 
 ```php
 <?php
@@ -36,7 +36,7 @@ $result = $w3w->wordsToPosition('table.book.chair');
 print_r($result);
 ```
 
-### Get position
+### Get 3 words for a position
 
 ```php
 <?php
