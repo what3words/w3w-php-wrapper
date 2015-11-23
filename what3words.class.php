@@ -2,23 +2,26 @@
 
 class what3words
 {
-	const API_KEY = 'YOURAPIKEY'; 	// Change to your what3words API key
-	private $language = 'en'; 	// Change to your default language
+	private $key;
+	private $language;
 
-	// --
-
-	public function __construct($language = null)
+	/*
+	 * @param string $key
+	 * @param string $language
+	 */
+	public function __construct($key, $language = 'en')
 	{
+		$this->key = $key;
 		$this->setLanguage($language);
 	}
 
 	private function postRequest($url, $data = array())
 	{
-		$ch = curl_init('http://api.what3words.com/' . $url);
-		$data['key'] = self::API_KEY;
+		$ch = curl_init('https://api.what3words.com/' . $url);
+		$data['key'] = $this->key;
 		$data['lang'] = $this->language;
 
-		curl_setopt($ch, CURLOPT_POST, count($data));
+		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -30,11 +33,12 @@ class what3words
 		return $return;
 	}
 
-	// --
-
 	/**
 	 * Sets the language in which to return words
+	 *
+	 * @param string $language
 	 */
+
 	public function setLanguage($language)
 	{
 		if (!empty($language))
@@ -42,9 +46,13 @@ class what3words
 	}
 
 	/**
-	 * Convert 3 words or OneWord into position
+	 * Convert a 3 word address into a position
 	 * Takes words either as string, or array of words
 	 * Returns array of [lat, long]
+	 *
+	 * @param string|array $words
+	 * @return array
+	 * @throws Exception
 	 */
 
 	public function wordsToPosition($words)
@@ -55,14 +63,18 @@ class what3words
 			throw new Exception('Invalid words passed');
 
 		$data = array('string' => $words);
-		$return = self::postRequest('w3w', $data);
+		$return = $this->postRequest('w3w', $data);
 		return $return['position'];
 	}
 
 	/**
-	 * Convert a position into 3 words
+	 * Convert a position into a 3 word address
 	 * Takes position either as string, or array of 2 values
 	 * Returns array of [word1, word2, word3]
+	 *
+	 * @param string|array $position
+	 * @return array
+	 * @throws Exception
 	 */
 
 	public function positionToWords($position)
@@ -73,9 +85,8 @@ class what3words
 			throw new Exception('Invalid position passed');
 
 		$data = array('position' => $position);
-		$return = self::postRequest('position', $data);
+		$return = $this->postRequest('position', $data);
 		return $return['words'];
 	}
 
 }
-

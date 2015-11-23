@@ -26,24 +26,24 @@ This function sets the classes' language, and takes a 2 letter language string:
 
 ## Code examples
 
-### Get 3 words
+### Get the position from a 3 word address
 
 ```php
 <?php
 
-$w3w = new What3words;
+$w3w = new what3words('YOUR-API-KEY');
 $result = $w3w->wordsToPosition('table.book.chair');
 print_r($result);
 
 ?>
 ```
 
-### Get position
+### Get a 3 word address from a position
 
 ```php
 <?php
 
-$w3w = new What3words;
+$w3w = new what3words('YOUR-API-KEY');
 $result = $w3w->positionToWords('51.484463, -0.195405');
 print_r($result);
 
