@@ -57,3 +57,4 @@ print_r($result);
 * `v1.0.2` 7/1/15 - More `README.md` updates
 * `v1.0.3` 18/1/15 - Remove hard-coded API key
 * `v1.0.4` 6/3/15 - Normalise class name across what3words wrappers
+* `v1.0.5` 23/11/15 - Add composer support. Make API key a constructor parameter. Minor code tweaks and doc updates
