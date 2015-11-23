@@ -1,4 +1,4 @@
-#what3words php-wrapper
+# what3words php-wrapper
 
 Use the what3words API in your PHP site (see http://developer.what3words.com/api)
 
@@ -50,3 +50,10 @@ print_r($result);
 ?>
 ```
 
+## Revision History
+
+* `v1.0.0` 8/12/14 - Initial release
+* `v1.0.1` 22/12/14 - Documentation updates to `README.md`
+* `v1.0.2` 7/1/15 - More `README.md` updates
+* `v1.0.3` 18/1/15 - Remove hard-coded API key
+* `v1.0.4` 6/3/15 - Normalise class name across what3words wrappers
