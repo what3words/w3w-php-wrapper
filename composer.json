@@ -1,0 +1,20 @@
+{
+    "name": "what3words/w3w-php-wrapper",
+    "description": "PHP wrapper for the what3words API",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "what3words",
+            "email": "support@what3words.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "archive": {
+        "exclude": ["vendor", ".DS_Store"]
+    },
+    "autoload": {
+        "files": ["what3words.class.php"]
+    }
+}
