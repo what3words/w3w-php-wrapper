@@ -1,8 +1,13 @@
 language: php
 php:
-  - '5.4'
-  - '5.5'
-  - '5.6'
-  - '7.0'
-  - hhvm
-  - nightly
+- '5.4'
+- '5.5'
+- '5.6'
+- '7.0'
+- hhvm
+- nightly
+env:
+  matrix:
+    secure: IoNjhY2Cc2Inv2mbLmNXOBIP6gPNGNqe+Ja4CDGuDl8J2UQJbgQP1Oi+Y0fyTBnAjjp4kjDMQnYd+XuDxlMVyYlIImX+c5kBMeiae6qNOegg+2FGoOyvojSaokhc4mXVizZ3/AvLgvAporjK7/CRSx3+qNfJLFQ/vuYmWiJMVLNbDUXO3xeiqYdPo/HXlUabfoTdgJV8MYkfGQH9tpU1/uXE2ttr/KAZmqs8vWe0bByluZIpgtpcHuyGUv6W2sBFOC/mRBnW+z8FVyrRmDNQ9Sig8hSfKq1UVq070jHs2WTkQAyd6PEfm2ElkVNHlOZPzQymdmVARZEuAmDljWV1b21r6QY6kfQmtytJXACR/2A1vQ9xZxMBzkAFHEt/Xd9zsHgESMgAKbOEHd6m/wFJTUsVKRkDpbLyALfKDoUffTj/7ZHtDAecIQFDrVC5BXafm00tv99AUlbG6dtdPPWxuRxLeS23rm0jyp/dR9UgK/K2gEDUfsanxCizNeoyZLguhi7uHhDUQ0mqKej8toBpI+vGvm2ARJKrekjvahbXqqnh3G+cWgKlihI3XOfwgt0A308WKZw+iPmu3r5k77N1l/I386sE1b35oBSHTT02s6ohfxehowvQFOk9WZx3ip+rvQV6AikoYSkM5jP3qHWQ/b2VxEFNiEDhmdIogCQJZbw=
+
+before_script: composer install
