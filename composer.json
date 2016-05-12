@@ -1,20 +1,42 @@
 {
     "name": "what3words/w3w-php-wrapper",
-    "description": "PHP wrapper for the what3words API",
+    "description": "A PHP library to use the what3words RESTful API",
+    "type": "library",
+    "keywords": ["what3words", "geocoding", "3 word address"],
+    "homepage": "https://github.com/what3words/w3w-php-wrapper",
     "license": "MIT",
     "authors": [
         {
             "name": "what3words",
             "email": "support@what3words.com"
+        },
+        {
+            "name": "Gary Gale",
+            "email": "gary@what3words.com",
+            "homepage": "http://www.garygale.com"
         }
     ],
+    "support": {
+        "email": "support@what3words.com",
+        "issues": "https://github.com/what3words/w3w-php-wrapper/issues",
+        "source": "https://github.com/what3words/w3w-php-wrapper",
+        "docs": "https://developer.what3words.com"
+    },
     "require": {
         "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.3"
     },
     "archive": {
         "exclude": ["vendor", ".DS_Store"]
     },
     "autoload": {
-        "files": ["what3words.class.php"]
+        "psr-4": {
+            "What3words\\Geocoder\\": "src"
+        }
+    },
+    "extra": {
+        "thanks": "Thanks from all of us at index.home.raft for using what3words"
     }
 }
