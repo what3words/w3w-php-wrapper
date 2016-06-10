@@ -15,8 +15,7 @@ namespace What3words\Geocoder;
 
 abstract class AbstractWrapper {
     const TIMEOUT = 10;
-    // const ENDPOINT = 'https://api.what3words.com/v2';
-    const ENDPOINT = 'https://beta.what3words.com/v2';
+    const ENDPOINT = 'https://api.what3words.com/v2';
 
     const TRANSPORT_CURL = 1;
     const TRANSPORT_FOPEN = 2;
