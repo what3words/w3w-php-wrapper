@@ -206,7 +206,7 @@ class Geocoder extends AbstractWrapper {
 
     private function buildUri($method, $params) {
         $query = http_build_query($params);
-        return sprintf('%s/%s?%s', self::ENDPOINT, $method, $query);
+        return sprintf('%s/%s?%s', $this->endpoint, $method, $query);
     }
 
     private function hasParam($params, $key) {
