@@ -1,4 +1,4 @@
-# ![what3words](https://map.what3words.com/images/map/marker-border.png)w3w-php-wrapper
+# <img src="https://what3words.com/assets/w3w_square_red.png" width="64" height="64" alt="what3words">&nbsp;w3w-php-wrapper
 
 A PHP library to use the [what3words REST API](https://docs.what3words.com/api/v2/).
 
