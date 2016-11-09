@@ -23,6 +23,7 @@ abstract class AbstractWrapper {
     protected $key;
     protected $timeout = self::TIMEOUT;
     protected $transport = self::TRANSPORT_CURL;
+    protected $endpoint = self::ENDPOINT;
 
     protected $handle = NULL;
     protected $context = NULL;
@@ -41,6 +42,10 @@ abstract class AbstractWrapper {
 
         if (isset($options['timeout']) && !empty($options['timeout'])) {
             $this->timeout = $options['timeout'];
+        }
+
+        if (isset($options['endpoint']) && !empty($options['endpoint'])) {
+            $this->endpoint = $options['endpoint'];
         }
 
         if (function_exists('curl_version')) {

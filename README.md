@@ -17,14 +17,13 @@ To use this library you’ll need a what3words API key, which can be signed up f
 The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/). Require the library in your project's `composer.json` file.
 
 ```
-$ composer require what3words/geocoder
+$ composer require what3words/w3w-php-wrapper
 ```
 
 Import the what3words `Geocoder` class.
 
 ```
 require "vendor/autoload.php";
-use What3words\Geocoder\Geocoder;
 ```
 
 Start geocoding with 3 word addresses.
@@ -34,7 +33,7 @@ $options = [
     'key' => 'your-key-here'
 ];
 try {
-    $geocoder = new Geocoder($options);
+    $geocoder = new \What3words\Geocoder\Geocoder($options);
     $payload = geocoder->forwardGeocode('index.home.raft');
 }
 catch (Exception $e) {
@@ -206,6 +205,7 @@ The returned payload from the `languages` method is described in the [what3words
 
 # Revision History
 
+* `v2.0.1` 05/09/16 - Updated README with correct composer package name. Added configuration options to override defaults
 * `v2.0.0` 12/05/16 - Complete rewrite supporting v2. of the what3words REST API
 * `v1.0.5` 23/11/15 - Add composer support. Make API key a constructor parameter. Minor code tweaks and doc updates
 * `v1.0.4` 6/3/15 - Normalise class name across what3words wrappers
