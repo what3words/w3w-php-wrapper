@@ -1,18 +1,23 @@
-# <img src="https://what3words.com/assets/images/w3w_square_red.png" width="64" height="64" alt="what3words">&nbsp;w3w-php-wrapper
+<img src="https://what3words.com/assets/images/w3w_square_red.png" width="64" height="64" alt="what3words">&nbsp;w3w-php-wrapper
+================================================================================================================================
 
 A PHP library to use the [what3words REST API](https://docs.what3words.com/api/v2/).
 
-# Overview
+Overview
+========
 
-The what3words PHP library gives you programmatic access to convert a 3 word address to coordinates (_forward geocoding_), to convert coordinates to a 3 word address (_reverse geocoding_), to obtain suggestions based on a full or partial 3 word address (_AutoSuggest_) and to determine the currently support 3 word address languages.
+The what3words PHP library gives you programmatic access to convert a 3 word address to coordinates (*forward geocoding*), to convert coordinates to a 3 word address (*reverse geocoding*), to obtain suggestions based on a full or partial 3 word address (*AutoSuggest*) and to determine the currently support 3 word address languages.
 
-## Authentication
+Authentication
+--------------
 
 To use this library you’ll need a what3words API key, which can be signed up for [here](https://map.what3words.com/register?dev=true).
 
-# Installation
+Installation
+============
 
-## With Composer
+With Composer
+-------------
 
 The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/). Require the library in your project's `composer.json` file.
 
@@ -41,7 +46,8 @@ catch (Exception $e) {
 }
 ```
 
-## The old fashioned way
+The old fashioned way
+---------------------
 
 Download the library's [latest release](https://github.com/what3words/w3w-php-wrapper/releases) and unpack. Then require the autoloader that will in turn load the library's `Geocoder` class automagically.
 
@@ -65,17 +71,18 @@ catch (Exception $e) {
 }
 ```
 
-# Usage
+Usage
+=====
 
-## Errors and exceptions
+Errors and exceptions
+---------------------
 
-The library will throw an exception under certain conditions, including:
-* Not providing an API key during library instantiation
-* Providing invalid format options to a library method
+The library will throw an exception under certain conditions, including:* Not providing an API key during library instantiation* Providing invalid format options to a library method
 
 The library will also return a set of [status and error codes](https://docs.what3words.com/api/v2/#errors) that are returned from the what3word REST API.
 
-## Initialisation
+Initialisation
+--------------
 
 ```
 use What3words\Geocoder\Geocoder;
@@ -87,7 +94,8 @@ $options = [
 $geocoder = new Geocoder($options);
 ```
 
-## Forward geocoding
+Forward geocoding
+-----------------
 
 ```
 $params = [
@@ -103,7 +111,8 @@ Forward geocodes a 3 word address to a position, expressed as coordinates of lat
 
 The returned payload from the `forwardGeocode` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#forward-result).
 
-## Reverse geocoding
+Reverse geocoding
+-----------------
 
 Reverse geocodes coordinates, expressed as latitude and longitude to a 3 word address.
 
@@ -122,15 +131,12 @@ $payload = $what3words->reverseGeocode($coords, $params);
 
 The returned payload from the `reverseGeocode` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#reverse-result).
 
-## AutoSuggest
+AutoSuggest
+-----------
 
 Returns a list of 3 word addresses based on user input and other parameters.
 
-This method provides corrections for the following types of input error:
-* typing errors
-* spelling errors
-* misremembered words (e.g. singular vs. plural)
-* words in the wrong order
+This method provides corrections for the following types of input error:* typing errors* spelling errors* misremembered words (e.g. singular vs. plural)* words in the wrong order
 
 The `autoSuggest` method determines possible corrections to the supplied 3 word address string based on the probability of the input errors listed above and returns a ranked list of suggestions. This method can also take into consideration the geographic proximity of possible corrections to a given location to further improve the suggestions returned.
 
@@ -143,6 +149,7 @@ You will only receive results back if the partial 3 word address string you subm
 We provide various `clip` policies to allow you to specify a geographic area that is used to exclude results that are not likely to be relevant to your users. We recommend that you use the `clip` parameter to give a more targeted, shorter set of results to your user. If you know your user’s current location, we also strongly recommend that you use the `focus` to return results which are likely to be more relevant.
 
 In summary, the `clip` policy is used to optionally restrict the list of candidate AutoSuggest results, after which, if `focus` has been supplied, this will be used to rank the results in order of relevancy to the focus.
+
 ```
 
 $params = [
@@ -190,7 +197,8 @@ $payload = $what3words->autoSuggest($partialAddr);
 
 The returned payload from the `autoSuggest` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#autosuggest-result).
 
-## Get Languages
+Get Languages
+-------------
 
 Retrieves a list of the currently loaded and available 3 word address languages.
 
@@ -203,13 +211,15 @@ $payload = $what3words->languages($coords);
 
 The returned payload from the `languages` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#lang-result).
 
-# Revision History
+Revision History
+================
 
-* `v2.0.1` 05/09/16 - Updated README with correct composer package name. Added configuration options to override defaults
-* `v2.0.0` 12/05/16 - Complete rewrite supporting v2. of the what3words REST API
-* `v1.0.5` 23/11/15 - Add composer support. Make API key a constructor parameter. Minor code tweaks and doc updates
-* `v1.0.4` 6/3/15 - Normalise class name across what3words wrappers
-* `v1.0.3` 18/1/15 - Remove hard-coded API key
-* `v1.0.2` 7/1/15 - More `README.md` updates
-* `v1.0.1` 22/12/14 - Documentation updates to `README.md`
-* `v1.0.0` 8/12/14 - Initial release
+-	`v2.0.2` 15/02/17 - Remove manual autoloader in favour of Composer's
+-	`v2.0.1` 05/09/16 - Updated README with correct composer package name. Added configuration options to override defaults
+-	`v2.0.0` 12/05/16 - Complete rewrite supporting v2. of the what3words REST API
+-	`v1.0.5` 23/11/15 - Add composer support. Make API key a constructor parameter. Minor code tweaks and doc updates
+-	`v1.0.4` 6/3/15 - Normalise class name across what3words wrappers
+-	`v1.0.3` 18/1/15 - Remove hard-coded API key
+-	`v1.0.2` 7/1/15 - More `README.md` updates
+-	`v1.0.1` 22/12/14 - Documentation updates to `README.md`
+-	`v1.0.0` 8/12/14 - Initial release
