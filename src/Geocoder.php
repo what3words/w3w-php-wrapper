@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 2.0.2
+ * @version 2.1.0
  * @package What3words\Geocoder
  */
 
@@ -16,12 +16,15 @@ namespace What3words\Geocoder;
 use What3words\Geocoder\AbstractWrapper;
 
 class Geocoder extends AbstractWrapper {
-    const USER_AGENT = 'what3words PHP wrapper v2.0.0';
+    const USER_AGENT = 'what3words PHP wrapper v2.1.0';
     const AUTH_HEADER = 'X-Api-Key';
 
     const METHOD_FORWARD = 'forward';
     const METHOD_REVERSE = 'reverse';
     const METHOD_AUTOSUGGEST = 'autosuggest';
+    const METHOD_AUTOSUGGEST_ML = 'autosuggest-ml';
+    const METHOD_STANDARDBLEND = 'standardblend';
+    const METHOD_STANDARDBLEND_ML = 'standardblend-ml';
     const METHOD_LANGUAGES = 'languages';
 
     private static $default_params = [
@@ -42,6 +45,21 @@ class Geocoder extends AbstractWrapper {
             'clip' => [
                 'type' => 'none'
             ]
+        ],
+        self::METHOD_AUTOSUGGEST_ML => [
+            'lang' => 'en',
+            'display' => 'full',
+            'format' => 'json'
+        ],
+        self::METHOD_STANDARDBLEND => [
+            'lang' => 'en',
+            'display' => 'full',
+            'format' => 'json'
+        ],
+        self::METHOD_STANDARDBLEND_ML => [
+            'lang' => 'en',
+            'display' => 'full',
+            'format' => 'json'
         ],
         self::METHOD_LANGUAGES => [
             'format' => 'json'
@@ -110,9 +128,85 @@ class Geocoder extends AbstractWrapper {
     //     ]
     // ];
     public function autoSuggest($threeWordAddr, $params=[]) {
-        $params['suggest'] = $threeWordAddr;
+        $params['addr'] = $threeWordAddr;
         $params = $this->buildParams(self::METHOD_AUTOSUGGEST, $params);
         $uri = $this->buildUri(self::METHOD_AUTOSUGGEST, $params);
+        return $this->getResponse($uri);
+    }
+
+    // $params = [
+    //     'lang' => 'en',
+    //     'display' => 'full',
+    //     'format' => 'json'
+    //     'focus' => [
+    //         'lat' => 0,
+    //         'lng' => 0
+    //     ],
+    //     'clip' => [
+    //         'type' => 'none'
+    //     ],
+    //     'clip' => [
+    //         'type' => 'radius',
+    //         'coords' => [
+    //             'lat' => 0,
+    //             'lng' => 0
+    //         ]
+    //         'distance' => 0
+    //     ],
+    //     'clip' => [
+    //         'type' => 'focus',
+    //         'distance' => 0
+    //     ],
+    //     'clip' => [
+    //         'type' => 'bbox',
+    //         'bbox' => [
+    //             'ne' => [
+    //                 'lat' => 0,
+    //                 'lng' => 0
+    //             ],
+    //             'sw' => [
+    //                 'lat' => 0,
+    //                 'lng' => 0
+    //             ]
+    //         ]
+    //     ]
+    // ];
+    public function autoSuggestML($threeWordAddr, $params=[]) {
+        $params['addr'] = $threeWordAddr;
+        $params = $this->buildParams(self::METHOD_AUTOSUGGEST_ML, $params);
+        $uri = $this->buildUri(self::METHOD_AUTOSUGGEST_ML, $params);
+        return $this->getResponse($uri);
+    }
+
+    // $params = [
+    //     'lang' => 'en',
+    //     'display' => 'full',
+    //     'format' => 'json'
+    //     'focus' => [
+    //         'lat' => 0,
+    //         'lng' => 0
+    //     ]
+    // ];
+    public function standardblend($threeWordAddr, $params=[]) {
+        $params['addr'] = $threeWordAddr;
+        $params = $this->buildParams(self::METHOD_AUTOSUGGEST, $params);
+        $uri = $this->buildUri(self::METHOD_AUTOSUGGEST, $params);
+        return $this->getResponse($uri);
+    }
+
+    // $params = [
+    //     'lang' => 'en',
+    //     'display' => 'full',
+    //     'format' => 'json'
+    //     'focus' => [
+    //         'lat' => 0,
+    //         'lng' => 0
+    //     ]
+    // ];
+    public function standardblendML($threeWordAddr, $params=[]) {
+        $params['addr'] = $threeWordAddr;
+        $params = $this->buildParams(self::METHOD_AUTOSUGGEST_ML, $params);
+        $uri = $this->buildUri(self::METHOD_AUTOSUGGEST_ML, $params);
         return $this->getResponse($uri);
     }
 
@@ -142,6 +236,27 @@ class Geocoder extends AbstractWrapper {
                 }
                 if ($this->hasParam($params, 'clip')) {
                     $params['clip'] = $this->buildClip($params['clip']);
+                }
+                break;
+
+            case self::METHOD_AUTOSUGGEST_ML:
+                if ($this->hasParam($params, 'focus')) {
+                    $params['focus'] = $this->buildCoords($params['focus']);
+                }
+                if ($this->hasParam($params, 'clip')) {
+                    $params['clip'] = $this->buildClip($params['clip']);
+                }
+                break;
+
+            case self::METHOD_STANDARDBLEND:
+                if ($this->hasParam($params, 'focus')) {
+                    $params['focus'] = $this->buildCoords($params['focus']);
+                }
+                break;
+
+            case self::METHOD_STANDARDBLEND_ML:
+                if ($this->hasParam($params, 'focus')) {
+                    $params['focus'] = $this->buildCoords($params['focus']);
                 }
                 break;
 

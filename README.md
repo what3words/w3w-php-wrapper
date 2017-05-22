@@ -21,19 +21,19 @@ With Composer
 
 The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/). Require the library in your project's `composer.json` file.
 
-```
+```shell
 $ composer require what3words/w3w-php-wrapper
 ```
 
 Import the what3words `Geocoder` class.
 
-```
+```php
 require "vendor/autoload.php";
 ```
 
 Start geocoding with 3 word addresses.
 
-```
+```php
 $options = [
     'key' => 'your-key-here'
 ];
@@ -51,14 +51,14 @@ The old fashioned way
 
 Download the library's [latest release](https://github.com/what3words/w3w-php-wrapper/releases) and unpack. Then require the autoloader that will in turn load the library's `Geocoder` class automagically.
 
-```
+```php
 require "w3w-php-wrapper/autoload.php";
 use What3words\Geocoder\Geocoder;
 ```
 
 Start geocoding with 3 word addresses.
 
-```
+```php
 $options = [
     'key' => 'your-key-here'
 ];
@@ -84,7 +84,7 @@ The library will also return a set of [status and error codes](https://docs.what
 Initialisation
 --------------
 
-```
+```php
 use What3words\Geocoder\Geocoder;
 
 $options = [
@@ -97,7 +97,7 @@ $geocoder = new Geocoder($options);
 Forward geocoding
 -----------------
 
-```
+```php
 $params = [
     'lang' => 'en',         // ISO 639-1 2 letter code; default: en
     'display' => 'full',    // full or terse, default: full
@@ -116,7 +116,7 @@ Reverse geocoding
 
 Reverse geocodes coordinates, expressed as latitude and longitude to a 3 word address.
 
-```
+```php
 $params = [
     'lang' => 'en',         // ISO 639-1 2 letter code; default: en
     'display' => 'full',    // full or terse, default: full
@@ -140,6 +140,13 @@ This method provides corrections for the following types of input error:* typing
 
 The `autoSuggest` method determines possible corrections to the supplied 3 word address string based on the probability of the input errors listed above and returns a ranked list of suggestions. This method can also take into consideration the geographic proximity of possible corrections to a given location to further improve the suggestions returned.
 
+### Single and Multilingual Variants
+AutoSuggest is provided via 2 variant resources; single language and multilingual.
+
+The single language autosuggest resource requires a language to be specified. The input full or partial 3 word address will be interpreted as being in the specified language and all suggestions will be in this language. We recommend that you set this according to the language of your user interface, or the browser/device language of your user. If your software or app displays 3 word addresses to users (in addition to accepting 3 words as a search/input) then we recommend you set the language parameter for this resource to the same language that 3 word addresses are displayed to your users.
+
+The multilingual `autoSuggestML` resource can accept an optional language. If specified, this will ensure that the `autoSuggestML` resource will look for suggestions in this language, in addition to any other languages that yield relevant suggestions.
+
 ### Input 3 word address
 
 You will only receive results back if the partial 3 word address string you submit contains the first two words and at least the first character of the third word; otherwise an error message will be returned.
@@ -150,8 +157,7 @@ We provide various `clip` policies to allow you to specify a geographic area tha
 
 In summary, the `clip` policy is used to optionally restrict the list of candidate AutoSuggest results, after which, if `focus` has been supplied, this will be used to rank the results in order of relevancy to the focus.
 
-```
-
+```php
 $params = [
     'lang' => 'en',         // ISO 639-1 2 letter code
     'display' => 'full',    // full or terse; default: full
@@ -192,10 +198,46 @@ $params = [
 ];
 
 $partialAddr = 'index.home.r';
-$payload = $what3words->autoSuggest($partialAddr);
+$payload = $what3words->autoSuggest($partialAddr, $params);
+
+$payload = $what3words->autoSuggestML($partialAddr, $params);
 ```
 
-The returned payload from the `autoSuggest` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#autosuggest-result).
+The returned payload from the `autoSuggest` and `autoSuggestML` methods are described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#autosuggest-result).
+
+Standardblend
+-------------
+
+Returns a blend of the three most relevant 3 word address candidates for a given location, based on a full or partial 3 word address.
+
+The specified 3 word address may either be a full 3 word address or a partial 3 word address containing the first 2 words in full and at least 1 character of the 3rd word. The standardblend resource provides the search logic that powers the search box on map.what3words.com and in the what3words mobile apps.
+
+*Single and Multilingual Variants*
+
+AutoSuggest is provided via 2 variant resources; single language and multilingual.
+
+The single language `standardblend` method  requires a language to be specified.
+
+The multilingual `standardblendML`  method  requires a language to be specified. This will ensure that the standardblend-ml resource will look for suggestions in this language, in addition to any other languages that yield relevant suggestions.
+
+```php
+$params = [
+    'lang' => 'en',         // ISO 639-1 2 letter code
+    'display' => 'full',    // full or terse; default: full
+    'format' => 'json',      // json or xml, default: json
+    'focus' => [
+        'lat' => 51.521251,
+        'lng' => -0.203586
+    ]
+];
+
+$partialAddr = 'index.home.r';
+$payload = $what3words->standardblend($partialAddr, $params);
+
+$payload = $what3words->standardblendML($partialAddr, $params);
+```
+
+The returned payload from the `standardblend` and `standardblendML` methods are described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#standardblend-result).
 
 Get Languages
 -------------
@@ -211,9 +253,26 @@ $payload = $what3words->languages($coords);
 
 The returned payload from the `languages` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#lang-result).
 
+Issues
+======
+
+Find a bug or want to request a new feature? Please let us know by submitting an issue.
+
+Contributing
+============
+
+Anyone and everyone is welcome to contribute.
+
+1. Fork it (http://github.com/what3words/w3w-php-wrapper and click "Fork")
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
 Revision History
 ================
 
+- `v2.1.0` 28/03/17 - Added multilingual version of `autosuggest` and `standardblend`
 -	`v2.0.2` 15/02/17 - Remove manual autoloader in favour of Composer's
 -	`v2.0.1` 05/09/16 - Updated README with correct composer package name. Added configuration options to override defaults
 -	`v2.0.0` 12/05/16 - Complete rewrite supporting v2. of the what3words REST API
@@ -223,3 +282,10 @@ Revision History
 -	`v1.0.2` 7/1/15 - More `README.md` updates
 -	`v1.0.1` 22/12/14 - Documentation updates to `README.md`
 -	`v1.0.0` 8/12/14 - Initial release
+
+Licensing
+=========
+
+The MIT License (MIT)
+
+A copy of the license is available in the repository's [license](LICENSE) file.
