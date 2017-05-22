@@ -104,7 +104,7 @@ $params = [
     'format' => 'json'      // json, geojson or xml, default: json
 ];
 $threeWordAddr = 'index.home.raft';
-$payload = $what3words->forwardGeocode($threeWordAddr, $params);
+$payload = $geocoder->forwardGeocode($threeWordAddr, $params);
 ```
 
 Forward geocodes a 3 word address to a position, expressed as coordinates of latitude and longitude.
@@ -126,7 +126,7 @@ $coords = [
     'lat' => 51.521251,
     'lng' => -0.203586
 ];
-$payload = $what3words->reverseGeocode($coords, $params);
+$payload = $geocoder->reverseGeocode($coords, $params);
 ```
 
 The returned payload from the `reverseGeocode` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#reverse-result).
@@ -160,7 +160,6 @@ In summary, the `clip` policy is used to optionally restrict the list of candida
 ```php
 $params = [
     'lang' => 'en',         // ISO 639-1 2 letter code
-    'display' => 'full',    // full or terse; default: full
     'format' => 'json',      // json or xml, default: json
     'focus' => [
         'lat' => 51.521251,
@@ -198,9 +197,9 @@ $params = [
 ];
 
 $partialAddr = 'index.home.r';
-$payload = $what3words->autoSuggest($partialAddr, $params);
+$payload = $geocoder->autoSuggest($partialAddr, $params);
 
-$payload = $what3words->autoSuggestML($partialAddr, $params);
+$payload = $geocoder->autoSuggestML($partialAddr, $params);
 ```
 
 The returned payload from the `autoSuggest` and `autoSuggestML` methods are described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#autosuggest-result).
@@ -223,7 +222,6 @@ The multilingual `standardblendML`  method  requires a language to be specified.
 ```php
 $params = [
     'lang' => 'en',         // ISO 639-1 2 letter code
-    'display' => 'full',    // full or terse; default: full
     'format' => 'json',      // json or xml, default: json
     'focus' => [
         'lat' => 51.521251,
@@ -232,12 +230,35 @@ $params = [
 ];
 
 $partialAddr = 'index.home.r';
-$payload = $what3words->standardblend($partialAddr, $params);
+$payload = $geocoder->standardblend($partialAddr, $params);
 
-$payload = $what3words->standardblendML($partialAddr, $params);
+$payload = $geocoder->standardblendML($partialAddr, $params);
 ```
 
 The returned payload from the `standardblend` and `standardblendML` methods are described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#standardblend-result).
+
+
+Grid
+----
+
+Returns a section of the 3m x 3m what3words grid for a given area.
+
+```
+$bbox= [                      // Bounding box, specified by the northeast
+    'ne' => [                 // and southwest corner coordinates,
+        'lat' => 52.208867,   // for which the grid should be returned.
+        'lng' => 0.117540
+    ],
+    'sw' => [
+        'lat' => 52.207988,
+        'lng' => 0.116126
+    ]
+];
+$params = [
+    'format' => 'json'        // json, or xml, default: json
+];
+$payload = $geocoder->grid($bbox, $param);
+
 
 Get Languages
 -------------
@@ -248,7 +269,7 @@ Retrieves a list of the currently loaded and available 3 word address languages.
 $params = [
     'format' => 'json'      // json, or xml, default: json
 ];
-$payload = $what3words->languages($coords);
+$payload = $geocoder->languages($params);
 ```
 
 The returned payload from the `languages` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v2/#lang-result).
@@ -272,6 +293,7 @@ Anyone and everyone is welcome to contribute.
 Revision History
 ================
 
+- `v2.2.0` 22/05/17 - Add grid method
 - `v2.1.0` 28/03/17 - Added multilingual version of `autosuggest` and `standardblend`
 -	`v2.0.2` 15/02/17 - Remove manual autoloader in favour of Composer's
 -	`v2.0.1` 05/09/16 - Updated README with correct composer package name. Added configuration options to override defaults

@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 2.1.0
+ * @version 2.2.0
  * @package What3words\Geocoder
  */
 
@@ -25,6 +25,7 @@ class Geocoder extends AbstractWrapper {
     const METHOD_AUTOSUGGEST_ML = 'autosuggest-ml';
     const METHOD_STANDARDBLEND = 'standardblend';
     const METHOD_STANDARDBLEND_ML = 'standardblend-ml';
+    const METHOD_GRID = 'grid';
     const METHOD_LANGUAGES = 'languages';
 
     private static $default_params = [
@@ -40,7 +41,6 @@ class Geocoder extends AbstractWrapper {
         ],
         self::METHOD_AUTOSUGGEST => [
             'lang' => 'en',
-            'display' => 'full',
             'format' => 'json',
             'clip' => [
                 'type' => 'none'
@@ -48,17 +48,17 @@ class Geocoder extends AbstractWrapper {
         ],
         self::METHOD_AUTOSUGGEST_ML => [
             'lang' => 'en',
-            'display' => 'full',
             'format' => 'json'
         ],
         self::METHOD_STANDARDBLEND => [
             'lang' => 'en',
-            'display' => 'full',
             'format' => 'json'
         ],
         self::METHOD_STANDARDBLEND_ML => [
             'lang' => 'en',
-            'display' => 'full',
+            'format' => 'json'
+        ],
+        self::METHOD_GRID => [
             'format' => 'json'
         ],
         self::METHOD_LANGUAGES => [
@@ -92,7 +92,6 @@ class Geocoder extends AbstractWrapper {
 
     // $params = [
     //     'lang' => 'en',
-    //     'display' => 'full',
     //     'format' => 'json'
     //     'focus' => [
     //         'lat' => 0,
@@ -136,7 +135,6 @@ class Geocoder extends AbstractWrapper {
 
     // $params = [
     //     'lang' => 'en',
-    //     'display' => 'full',
     //     'format' => 'json'
     //     'focus' => [
     //         'lat' => 0,
@@ -180,7 +178,6 @@ class Geocoder extends AbstractWrapper {
 
     // $params = [
     //     'lang' => 'en',
-    //     'display' => 'full',
     //     'format' => 'json'
     //     'focus' => [
     //         'lat' => 0,
@@ -196,7 +193,6 @@ class Geocoder extends AbstractWrapper {
 
     // $params = [
     //     'lang' => 'en',
-    //     'display' => 'full',
     //     'format' => 'json'
     //     'focus' => [
     //         'lat' => 0,
@@ -207,6 +203,16 @@ class Geocoder extends AbstractWrapper {
         $params['addr'] = $threeWordAddr;
         $params = $this->buildParams(self::METHOD_AUTOSUGGEST_ML, $params);
         $uri = $this->buildUri(self::METHOD_AUTOSUGGEST_ML, $params);
+        return $this->getResponse($uri);
+    }
+
+    // $params = [
+    //     'format' => 'json'
+    // ];
+    public function grid($bbox, $params=[]) {
+        $params['bbox'] = $bbox;
+        $params = $this->buildParams(self::METHOD_GRID, $params);
+        $uri = $this->buildUri(self::METHOD_GRID, $params);
         return $this->getResponse($uri);
     }
 
@@ -260,6 +266,10 @@ class Geocoder extends AbstractWrapper {
                 }
                 break;
 
+            case self::METHOD_GRID:
+                $params['bbox'] = $this->buildBBox($params['bbox']);
+                break;
+
             case self::METHOD_LANGUAGES:
             default:
                 break;
@@ -273,6 +283,13 @@ class Geocoder extends AbstractWrapper {
             return sprintf('%f,%f', $coords['lat'], $coords['lng']);
         }
         throw new \Exception('what3words: Invalid format coordinates');
+    }
+
+    private function buildBBox($bbox) {
+        if ((gettype($bbox) === 'array') && $this->hasParam($bbox, 'ne') && $this->hasParam($bbox, 'sw')) {
+            return sprintf('%s,%s', $this->buildCoords($bbox['ne']), $this->buildCoords($bbox['sw']));
+        }
+        throw new \Exception('what3words: Invalid format bbox');
     }
 
     private function buildClip($clip) {

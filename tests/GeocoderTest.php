@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 2.1.0
+ * @version 2.2.0
  * @package What3words\Geocoder
  */
 
@@ -171,6 +171,55 @@ class GeocoderTest extends \PHPUnit_Framework_TestCase
                   'lng' => -0.203586
               ]]
             ]
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+
+    public function testGrid()
+    {
+        $bbox = [                   // Bounding box, specified by the northeast
+            'ne' => [                 // and southwest corner coordinates,
+                'lat' => 52.208867,   // for which the grid should be returned.
+                'lng' => 0.117540
+            ],
+            'sw' => [
+                'lat' => 52.207988,
+                'lng' => 0.116126
+            ]
+        ];
+        $params = [
+            'format' => 'json'
+        ];
+        $payload = $this->geocoder->grid($bbox, $params);
+        $json = json_decode($payload, true);
+        // print_r($json);
+        $expected = [
+            'status' => [
+                'status' => 200,
+                'reason' => 'OK'
+              ],
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+
+    public function testLanguages()
+    {
+        $params = [
+            'format' => 'json'
+        ];
+        $payload = $this->geocoder->languages($params);
+        $json = json_decode($payload, true);
+      // print_r($json);
+      $expected = [
+          'status' => [
+              'status' => 200,
+              'reason' => 'OK'
+          ],
+          // 'languages' => [[
+          //     'code' => 'en',
+          //     'name' => 'English',
+          //     'native_name' => 'English'
+          // ]]
         ];
         $this->assertArraySubset($expected, $json);
     }
