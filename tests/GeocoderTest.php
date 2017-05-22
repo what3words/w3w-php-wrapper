@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 2.0.2
+ * @version 2.1.0
  * @package What3words\Geocoder
  */
 
@@ -15,22 +15,26 @@ namespace What3words\Geocoder\Test;
 
 use What3words\Geocoder\Geocoder;
 
-class GeocoderTest extends \PHPUnit_Framework_TestCase {
+class GeocoderTest extends \PHPUnit_Framework_TestCase
+{
     protected $geocoder;
 
-    protected function setUp() {
+    protected function setUp()
+    {
         $options = [
             'key' => API_KEY
         ];
         $this->geocoder = new Geocoder($options);
     }
 
-    public function testBuildGeocoder() {
+    public function testBuildGeocoder()
+    {
         $this->assertObjectHasAttribute('key', $this->geocoder);
         $this->assertObjectHasAttribute('timeout', $this->geocoder);
     }
 
-    public function testInvalidKey() {
+    public function testInvalidKey()
+    {
         $options = [
             'key' => 'NOTWORKING'
         ];
@@ -45,7 +49,8 @@ class GeocoderTest extends \PHPUnit_Framework_TestCase {
         $this->assertArraySubset($expected, $json);
     }
 
-    public function testForwardGeocodeWithJson() {
+    public function testForwardGeocodeWithJson()
+    {
         $threeWordAddr = 'index.home.raft';
         $payload = $this->geocoder->forwardGeocode($threeWordAddr);
 
@@ -64,7 +69,8 @@ class GeocoderTest extends \PHPUnit_Framework_TestCase {
         $this->assertArraySubset($expected, $json);
     }
 
-    public function testReverseGeocodeWithJson() {
+    public function testReverseGeocodeWithJson()
+    {
         $coords = [
             'lat' => 51.521251,
             'lng' => -0.203586
@@ -84,6 +90,88 @@ class GeocoderTest extends \PHPUnit_Framework_TestCase {
         ];
         $this->assertArraySubset($expected, $json);
     }
-}
 
-?>
+    public function testAutosuggest()
+    {
+        $suggest = 'index.home.raft';
+        $payload = $this->geocoder->autoSuggest($suggest);
+        $json = json_decode($payload, true);
+        $expected = [
+            'status' => [
+                'status' => 200,
+                'reason' => 'OK'
+            ],
+            'suggestions' => [[
+              'words' => 'index.home.raft',
+              'geometry' => [
+                  'lat' => 51.521251,
+                  'lng' => -0.203586
+              ]]
+            ]
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+
+    public function testAutosuggest_ML()
+    {
+        $suggest = 'index.home.raft';
+        $payload = $this->geocoder->autoSuggestML($suggest);
+        $json = json_decode($payload, true);
+        $expected = [
+            'status' => [
+                'status' => 200,
+                'reason' => 'OK'
+            ],
+            'suggestions' => [[
+              'words' => 'index.home.raft',
+              'geometry' => [
+                  'lat' => 51.521251,
+                  'lng' => -0.203586
+              ]]
+            ]
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+
+    public function testStandardBlend()
+    {
+        $suggest = 'index.home.raft';
+        $payload = $this->geocoder->standardblend($suggest);
+        $json = json_decode($payload, true);
+        $expected = [
+            'status' => [
+                'status' => 200,
+                'reason' => 'OK'
+            ],
+            'suggestions' => [[
+              'words' => 'index.home.raft',
+              'geometry' => [
+                  'lat' => 51.521251,
+                  'lng' => -0.203586
+              ]]
+            ]
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+
+    public function testStandardBlend_ML()
+    {
+        $suggest = 'index.home.raft';
+        $payload = $this->geocoder->standardblendML($suggest);
+        $json = json_decode($payload, true);
+        $expected = [
+            'status' => [
+                'status' => 200,
+                'reason' => 'OK'
+            ],
+            'suggestions' => [[
+              'words' => 'index.home.raft',
+              'geometry' => [
+                  'lat' => 51.521251,
+                  'lng' => -0.203586
+              ]]
+            ]
+        ];
+        $this->assertArraySubset($expected, $json);
+    }
+}
