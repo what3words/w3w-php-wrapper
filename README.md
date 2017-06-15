@@ -39,7 +39,7 @@ $options = [
 ];
 try {
     $geocoder = new \What3words\Geocoder\Geocoder($options);
-    $payload = geocoder->forwardGeocode('index.home.raft');
+    $payload = $geocoder->forwardGeocode('index.home.raft');
 }
 catch (Exception $e) {
     // exception handling code
@@ -64,7 +64,7 @@ $options = [
 ];
 try {
     $geocoder = new Geocoder($options);
-    $payload = geocoder->forwardGeocode('index.home.raft');
+    $payload = $geocoder->forwardGeocode('index.home.raft');
 }
 catch (Exception $e) {
     // exception handling code
