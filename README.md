@@ -11,7 +11,7 @@ The what3words PHP library gives you programmatic access to convert a 3 word add
 Authentication
 --------------
 
-To use this library you’ll need a what3words API key, which can be signed up for [here](https://map.what3words.com/register?dev=true).
+To use this library you’ll need a what3words API key, which can be signed up for [here](https://accounts.what3words.com/register?dev=true).
 
 Installation
 ============
