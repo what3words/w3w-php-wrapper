@@ -115,7 +115,7 @@ class Geocoder {
 
         $data = json_decode($json, true);
 
-        if ($data["error"])
+        if (isset($data["error"]))
           {
           $this->error["code"]    = $data["error"]["code"];
           $this->error["message"] = $data["error"]["message"];
