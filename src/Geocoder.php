@@ -8,7 +8,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.0.0
+ * @version 3.1.0
  * @package What3words\Geocoder
  */
 
@@ -17,15 +17,18 @@ namespace What3words\Geocoder;
 
 class Geocoder {
 
+    var $version  = "3.1.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
     var $api_key  = "";
     var $error    = false;
     var $base_url = 'https://api.what3words.com/v3/';
+    var $header   = "what3words-PHP/x.x.x (PHP x.x.x; OS x.x.x)";
 
     // To contruct this you need API key.  You can get one here: https://accounts.what3words.com/en/register/
     // - parameter apiKey: What3Words api key
     public function __construct($api_key)
         {
         $this->api_key = $api_key;
+        $this->header  = "what3words-PHP/" . $this->version . " (PHP " . phpversion() . "; " . php_uname("s") . " " . php_uname("r") . ")";
         }
 
 
@@ -133,6 +136,7 @@ class Geocoder {
 
         // set the options
         curl_setopt($handle, CURLOPT_URL, $url);
+        curl_setopt($handle, CURLOPT_HTTPHEADER, array("X-W3W-Wrapper: " . $this->header));
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($handle, CURLOPT_ENCODING, "");
         curl_setopt($handle, CURLOPT_MAXREDIRS, 10);
