@@ -8,7 +8,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.1.0
+ * @version 3.3.0
  * @package What3words\Geocoder
  */
 
@@ -17,7 +17,7 @@ namespace What3words\Geocoder;
 
 class Geocoder {
 
-    var $version  = "3.1.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
+    var $version  = "3.3.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
     var $api_key  = "";
     var $error    = false;
     var $base_url = 'https://api.what3words.com/v3/';
@@ -81,7 +81,7 @@ class Geocoder {
     // - option AutoSuggestOption::bounding_box(south_lat:Double, west_lng:Double, north_lat: Double, east_lng:Double): Restrict autosuggest results to a bounding box, specified by coordinates. Such as south_lat,west_lng,north_lat,east_lng, where: south_lat <= north_lat west_lng <= east_lng In other words, latitudes and longitudes should be specified order of increasing size. Lng is allowed to wrap, so that you can specify bounding boxes which cross the ante-meridian: -4,178.2,22,195.4 Example value: "51.521,-0.343,52.6,2.3324"
     // - option AutoSuggestOption::bounding_circle(lat:Double, lng:Double, kilometers:Double): Restrict autosuggest results to a circle, specified by lat,lng,kilometres. For convenience, longitude is allowed to wrap around 180 degrees. For example 181 is equivalent to -179. Example value: "51.521,-0.343,142"
     // - option AutoSuggestOption::bounding_polygon(array(lat,lng, lat,lng, ...)): Restrict autosuggest results to a polygon, specified by a comma-separated list of lat,lng pairs. The polygon should be closed, i.e. the first element should be repeated as the last element; also the list should contain at least 4 entries. The API is currently limited to accepting up to 25 pairs. Example value: "51.521,-0.343,52.6,2.3324,54.234,8.343,51.521,-0.343"
-    // - option AutoSuggestOption::input_type(): For power users, used to specify voice input mode. Can be text (default), vocon-hybrid or nmdp-asr. See voice recognition section for more details.
+    // - option AutoSuggestOption::input_type(): For power users, used to specify voice input mode. Can be text (default), vocon-hybrid, nmdp-asr or generic-voice. See voice recognition section for more details.
     // - option AutoSuggestOption::fallback_language(): For normal text input, specifies a fallback language, which will help guide AutoSuggest if the input is particularly messy. If specified, this parameter must be a supported 3 word address language as an ISO 639-1 2 letter code. For voice input (see voice section), language must always be specified.
     public function autosuggest($input, $options=array())
         {
@@ -184,11 +184,19 @@ class AutoSuggestOption
       return array("n-focus-results" => "$number_focus_results");
       }
       
-    static function inputType($input_type)
+      static function inputType($input_type)
       {
-      return array("input-type" => "$input_type");
+        return array("input-type" => "$input_type");
       }
-
+      
+      static function preferLand($land)
+      {
+        if ($land)
+          return array("prefer-land" => "true");
+        else
+          return array("prefer-land" => "false");
+      }
+      
     static function clipToCountry($country)
       {
       return array("clip-to-country" => "$country");
