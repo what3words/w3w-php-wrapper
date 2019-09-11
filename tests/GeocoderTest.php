@@ -21,7 +21,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
 {
     protected $geocoder;
 
-  protected function setUp() : void
+  protected function setUp()
     {
         $this->geocoder = new Geocoder(getenv('W3W_API_KEY'));
     }
