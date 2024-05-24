@@ -3,10 +3,10 @@ require_once "./Geocoder.php";
 use What3words\Geocoder\Geocoder;
 
 $api = new Geocoder(getenv('W3W_API_KEY'));
-$w3w = $_GET["what3words"];
+$what3words = isset($_GET["what3words"]) ? $_GET["what3words"] : null;
 $result = null;
-if (isset($w3w)) {
-  $result = $api->convertToCoordinates($w3w);
+if ($what3words) {
+  $result = $api->convertToCoordinates($what3words);
 }
 
 ?>
@@ -17,32 +17,53 @@ if (isset($w3w)) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>what3words</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.2rem;
+    }
+
+    input {
+      font-size: 1rem;
+    }
+
+    #invalid-what3words {
+      color: red;
+      font-weight: bold;
+    }
+
+    #nearest-place {
+      font-weight: bold;
+    }
+
+    #coordinates {
+      color: grey;
+      font-weight: bold;
+    }
+
+    .label {
+      font-size: 0.95rem;
+      color: black;
+      font-weight: normal;
+    }
+  </style>
 </head>
 
 <body>
   <form action="index.php" method="GET">
-    what3words: <input type="text" name="what3words" value="<?php echo $w3w; ?>">
+    what3words: <input type="text" name="what3words" value="<?php echo $what3words; ?>">
     <input type="submit">
   </form>
-  <div id="nearest-place">
-    <span>Nearest Place: </span>
-    <?php
-    if (isset($result)) {
-      echo isset($result['nearestPlace']) ? $result['nearestPlace'] : 'unknown';
-    }
-    ?>
-  </div>
-  <div id="coordinates">
-    <span>Coordinates:</span>
-    <?php
-    if (isset($result)) {
-      $lat = isset($result['coordinates']) ? $result['coordinates']['lat'] : 'unknown';
-      $lng = isset($result['coordinates']) ? $result['coordinates']['lng'] : 'unknown';
-      echo $lat . ", " . $lng;
-    }
-    ?>
-  </div>
-
+  <?php
+  if ($result && $result['coordinates']) {
+    echo '<div id="nearest-place"><span class="label">Nearest Place: </span>' . $result['nearestPlace'] . ', ' . $result['country'] . '</div>';
+    echo '<div id="coordinates"><span class="label">Coordinates: </span>' . $result['coordinates']['lat'] . ', ' . $result['coordinates']['lng'] . '</div>';
+  }
+  if (!$result || !$result['coordinates']) {
+    echo '<div id="invalid-what3words"><span class="label">Error: </span>Invalid what3words</div>';
+  }
+  ?>
 </body>
 
 </html>
