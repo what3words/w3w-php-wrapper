@@ -60,7 +60,7 @@ if ($what3words) {
     echo '<div id="nearest-place"><span class="label">Nearest Place: </span>' . $result['nearestPlace'] . ', ' . $result['country'] . '</div>';
     echo '<div id="coordinates"><span class="label">Coordinates: </span>' . $result['coordinates']['lat'] . ', ' . $result['coordinates']['lng'] . '</div>';
   }
-  if (!$result || !$result['coordinates']) {
+  if ($what3words && (!$result || !$result['coordinates'])) {
     echo '<div id="invalid-what3words"><span class="label">Error: </span>Invalid what3words</div>';
   }
   ?>
