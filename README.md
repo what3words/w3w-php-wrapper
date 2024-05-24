@@ -187,3 +187,18 @@ Watch configuration for service "server":
   - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/src"
   - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/tests"
 ```
+
+### Running tests (using Docker)
+
+Once you've spin up the container, you can run `docker exec php-server /var/www/html/vendor/bin/phpunit` to execute the unit tests.
+
+```
+$ docker exec php-server /var/www/html/vendor/bin/phpunit
+PHPUnit 5.5.4 by Sebastian Bergmann and contributors.
+
+......................                                            22 / 22 (100%)
+
+Time: 1.57 seconds, Memory: 3.25MB
+
+OK (22 tests, 25 assertions)
+```
