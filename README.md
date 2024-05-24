@@ -183,9 +183,9 @@ $ docker compose watch
 [+] Running 1/1
  ✔ Container php-server  Started                                                                                     0.0s
 Watch configuration for service "server":
-  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/development/src"
-  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/src"
-  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/tests"
+  - Action sync for path "/w3w-php-wrapper/development/src"
+  - Action sync for path "/w3w-php-wrapper/src"
+  - Action sync for path "/w3w-php-wrapper/tests"
 ```
 
 ### Running tests (using Docker)
