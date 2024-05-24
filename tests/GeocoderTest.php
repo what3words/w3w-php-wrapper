@@ -164,7 +164,7 @@ class GeocoderTest extends TestCase
 
     public function testAutosuggestFindPossible3wa()
     {
-        $result = $this->geocoder->findPossible3wa('we use to be based in "index.home.raft" but we moved to " "filled.count.soap"');
+        $result = $this->geocoder->findPossible3wa('from "index.home.raft" to " "filled.count.soap"');
         $this->assertEquals(2, count($result));
     }
 
