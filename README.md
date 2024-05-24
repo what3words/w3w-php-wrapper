@@ -171,3 +171,19 @@ print_r($api->getError());
 ```
 
 Error values are listed in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#error-handling).
+
+## Development (using Docker)
+
+You can see `w3w-php-wrapper` in action by running `docker compose watch` and open http://localhost:9000 on your browser. Any changes you make to the source code will be reloaded as you refresh your browser, just ensure you have loaded your environment variable named: `W3W_API_KEY` by running `export W3W_API_KEY=<YOUR_API_KEY>`.
+
+```sh
+$ export W3W_API_KEY=KEYFROMW3W
+$ docker compose watch
+[+] Building 0.6s (18/18) FINISHED
+[+] Running 1/1
+ ✔ Container php-server  Started                                                                                     0.0s
+Watch configuration for service "server":
+  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/development/src"
+  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/src"
+  - Action sync for path "/Users/fredericklee/Documents/Projects/Integrations/wrappers/w3w-php-wrapper/tests"
+```
