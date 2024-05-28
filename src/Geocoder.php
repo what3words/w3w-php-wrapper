@@ -80,7 +80,7 @@ class Geocoder
   // - option AutoSuggestOption::number_focus_results(): Specifies the number of results (must be <= n-results) within the results set which will have a focus. Defaults to n-results. This allows you to run autosuggest with a mix of focussed and unfocussed results, to give you a "blend" of the two. This is exactly what the old V2 standarblend did, and standardblend behaviour can easily be replicated by passing n-focus-results=1, which will return just one focussed result and the rest unfocussed.
   // - option AutoSuggestOption::bounding_country(): Restricts autosuggest to only return results inside the countries specified by comma-separated list of uppercase ISO 3166-1 alpha-2 country codes (for example, to restrict to Belgium and the UK, use clip-to-country=GB,BE). Clip-to-country will also accept lowercase country codes. Entries must be two a-z letters. WARNING: If the two-letter code does not correspond to a country, there is no error: API simply returns no results. eg: "NZ,AU"
   // - option AutoSuggestOption::bounding_box(south_lat:Double, west_lng:Double, north_lat: Double, east_lng:Double): Restrict autosuggest results to a bounding box, specified by coordinates. Such as south_lat,west_lng,north_lat,east_lng, where: south_lat <= north_lat west_lng <= east_lng In other words, latitudes and longitudes should be specified order of increasing size. Lng is allowed to wrap, so that you can specify bounding boxes which cross the ante-meridian: -4,178.2,22,195.4 Example value: "51.521,-0.343,52.6,2.3324"
-  // - option AutoSuggestOption::bounding_circle(lat:Double, lng:Double, kilometers:Double): Restrict autosuggest results to a circle, specified by lat,lng,kilometres. For convenience, longitude is allowed to wrap around 180 degrees. For example 181 is equivalent to -179. Example value: "51.521,-0.343,142"
+  // - option AutoSuggestOption::bounding_circle(lat:Double, lng:Double, kilometres:Double): Restrict autosuggest results to a circle, specified by lat,lng,kilometres. For convenience, longitude is allowed to wrap around 180 degrees. For example 181 is equivalent to -179. Example value: "51.521,-0.343,142"
   // - option AutoSuggestOption::bounding_polygon(array(lat,lng, lat,lng, ...)): Restrict autosuggest results to a polygon, specified by a comma-separated list of lat,lng pairs. The polygon should be closed, i.e. the first element should be repeated as the last element; also the list should contain at least 4 entries. The API is currently limited to accepting up to 25 pairs. Example value: "51.521,-0.343,52.6,2.3324,54.234,8.343,51.521,-0.343"
   // - option AutoSuggestOption::input_type(): For power users, used to specify voice input mode. Can be text (default), vocon-hybrid, nmdp-asr or generic-voice. See voice recognition section for more details.
   // - option AutoSuggestOption::fallback_language(): For normal text input, specifies a fallback language, which will help guide AutoSuggest if the input is particularly messy. If specified, this parameter must be a supported 3 word address language as an ISO 639-1 2 letter code. For voice input (see voice section), language must always be specified.
@@ -95,7 +95,7 @@ class Geocoder
     return $this->performRequest("autosuggest", $parameters);
   }
 
-  // Determines of the string passed in is the form of a three word address.
+  // Determines if the string passed in is the form of a three word address.
   // This does not validate whether it is a real address as it returns 1 for x.x.x
   public function isPossible3wa($input)
   {
@@ -115,7 +115,7 @@ class Geocoder
     return array();
   }
 
-  // Determines of the string passed in is a real three word address.
+  // Determines if the string passed in is a real three word address.
   // It calls the API to verify it refers to an actual place on earth.
   // Returns 1 if valid, 0 if not
   public function isValid3wa($input)
@@ -197,7 +197,7 @@ class Geocoder
 }
 
 
-// These are static funcntions that make options to be passed into autosuggest
+// These are static helper functions that creates options (as array) to be passed into autosuggest
 class AutoSuggestOption
 {
   public static function fallbackLanguage($language)
