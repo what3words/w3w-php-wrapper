@@ -174,7 +174,7 @@ Error values are listed in the [what3words REST API documentation](https://docs.
 
 ## Development (using Docker)
 
-You can see `w3w-php-wrapper` in action by running `docker compose watch` and open http://localhost:9000 on your browser. Any changes you make to the source code will be reloaded as you refresh your browser, just ensure you have loaded your environment variable named: `W3W_API_KEY` by running `export W3W_API_KEY=<YOUR_API_KEY>`.
+You can see `w3w-php-wrapper` in action by running `docker compose watch` (make sure you're running this from the `development` directory) and open http://localhost:9000 on your browser. Any changes you make to the source code will be reloaded as you refresh your browser, just ensure you have loaded your environment variable named: `W3W_API_KEY` by running `export W3W_API_KEY=<YOUR_API_KEY>`.
 
 ```sh
 $ export W3W_API_KEY=KEYFROMW3W
