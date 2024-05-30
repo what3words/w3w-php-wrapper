@@ -8,12 +8,8 @@
     "authors": [
         {
             "name": "what3words",
-            "email": "support@what3words.com"
-        },
-        {
-            "name": "Gary Gale",
-            "email": "gary@what3words.com",
-            "homepage": "http://www.garygale.com"
+            "email": "support@what3words.com",
+            "homepage": "http://developer.what3words.com"
         }
     ],
     "support": {

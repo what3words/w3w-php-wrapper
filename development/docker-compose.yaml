@@ -1,0 +1,22 @@
+services:
+  server:
+    container_name: php-server
+    build:
+      context: ..
+      dockerfile: ./development/Dockerfile
+      target: development
+    ports:
+      - 9000:80
+    environment:
+      - W3W_API_KEY=${W3W_API_KEY}
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /var/www/html
+        - action: sync
+          path: ../src
+          target: /var/www/html
+        - action: sync
+          path: ../tests
+          target: /var/www/html/tests

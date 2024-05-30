@@ -4,13 +4,13 @@ A PHP library to use the [what3words REST API](https://docs.what3words.com/api/v
 
 # Overview
 
-The what3words PHP wrapper gives you programmatic access to 
+The what3words PHP wrapper gives you programmatic access to
 
-* convert a 3 word address to coordinates 
-* convert coordinates to a 3 word address
-* autosuggest functionality which takes a slightly incorrect 3 word address, and suggests a list of valid 3 word addresses
-* obtain a section of the 3m x 3m what3words grid for a bounding box.
-* determine the currently support 3 word address languages.
+- convert a 3 word address to coordinates
+- convert coordinates to a 3 word address
+- autosuggest functionality which takes a slightly incorrect 3 word address, and suggests a list of valid 3 word addresses
+- obtain a section of the 3m x 3m what3words grid for a bounding box.
+- determine the currently support 3 word address languages.
 
 ## Authentication
 
@@ -18,7 +18,7 @@ To use this library you’ll need to obtain an API key, please visit [https://wh
 
 # Installation
 
-#### Composer 
+#### Composer
 
 To use this library in your project, place the following line in your composer.json:
 
@@ -39,8 +39,8 @@ use What3words\Geocoder\AutoSuggestOption;
 $api = new Geocoder("<Secret API Key>");
 ```
 
-
 ## Convert To Coordinates
+
 Convert a 3 word address to a position, expressed as coordinates of latitude and longitude.
 
 This function takes the words parameter as a string of 3 words `'table.book.chair'`
@@ -48,6 +48,7 @@ This function takes the words parameter as a string of 3 words `'table.book.chai
 The returned payload from the `convertToCoordinates` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#convert-to-coordinates).
 
 #### Code Example
+
 ```php
 $result = $api->convertToCoordinates("index.home.raft");
 print_r($result);
@@ -60,6 +61,7 @@ Convert coordinates, expressed as latitude and longitude to a 3 word address.
 The returned payload from the `convertTo3wa` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#convert-to-3wa).
 
 #### Code Example
+
 ```php
 $result = $api->convertTo3wa(51.432393,-0.348023);
 print_r($result);
@@ -67,11 +69,12 @@ print_r($result);
 
 ## Available Languages
 
-This function returns the currently supported languages.  It will return the two letter code ([ISO 639](https://en.wikipedia.org/wiki/ISO_639)), and the name of the language both in that language and in English.
+This function returns the currently supported languages. It will return the two letter code ([ISO 639](https://en.wikipedia.org/wiki/ISO_639)), and the name of the language both in that language and in English.
 
 The returned payload from the `convertTo3wa` method is described in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#available-languages)
 
 #### Code Example
+
 ```php
 $result = $api->availableLanguages();
 print_r($result);
@@ -79,11 +82,12 @@ print_r($result);
 
 ## Grid Section
 
-Returns a section of the 3m x 3m what3words grid for a given area. The requested box must not exceed 4km from corner to corner, or a BadBoundingBoxTooBig error will be returned. Latitudes must be >= -90 and <= 90, but longitudes are allowed to wrap around 180. To specify a bounding-box that crosses the anti-meridian, use longitude greater than 180. Example value: 50.0, 179.995, 50.01, 180.0005. 
+Returns a section of the 3m x 3m what3words grid for a given area. The requested box must not exceed 4km from corner to corner, or a BadBoundingBoxTooBig error will be returned. Latitudes must be >= -90 and <= 90, but longitudes are allowed to wrap around 180. To specify a bounding-box that crosses the anti-meridian, use longitude greater than 180. Example value: 50.0, 179.995, 50.01, 180.0005.
 
-The returned payload from the `gridSection` function  is described in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#grid-section)
+The returned payload from the `gridSection` function is described in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#grid-section)
 
 #### Code Example
+
 ```php
 $result = $api->gridSection(39.903795, 116.384550, 39.902718, 116.383122);
 print_r($result);
@@ -94,10 +98,11 @@ print_r($result);
 Returns a list of 3 word addresses based on user input and other parameters.
 
 This method provides corrections for the following types of input error:
-* typing errors
-* spelling errors
-* misremembered words (e.g. singular vs. plural)
-* words in the wrong order
+
+- typing errors
+- spelling errors
+- misremembered words (e.g. singular vs. plural)
+- words in the wrong order
 
 The `autoSuggest` method determines possible corrections to the supplied 3 word address string based on the probability of the input errors listed above and returns a ranked list of suggestions. This method can also take into consideration the geographic proximity of possible corrections to a given location to further improve the suggestions returned.
 
@@ -115,20 +120,22 @@ The returned payload from the `autosuggest` method is described in the [what3wor
 
 ### Usage
 
-The first parameter is the partial three words, or voice data.  It is followed by an array of AutoSuggestOption objects.  The last parameter is the completion block.  The AutoSuggestOption objects in the array are created using static convenience functions of the form: 
+The first parameter is the partial three words, or voice data. It is followed by an array of AutoSuggestOption objects. The last parameter is the completion block. The AutoSuggestOption objects in the array are created using static convenience functions of the form:
 
 ```php
-AutoSuggestOption::fallbackLanguage("de"); 
+AutoSuggestOption::fallbackLanguage("de");
 AutoSuggestOption::focus($latitude, $longitude);
 ```
 
-#### Code Example
+#### Code Example #1
+
 ```php
 $result = $api->autosuggest("fun.with.code");
 print_r($result);
 ```
 
-#### Code Example Two
+#### Code Example #2
+
 Focus on (51.4243877,-0.34745) and look for 6 results.
 
 ```php
@@ -136,13 +143,62 @@ $result = $api->autosuggest("fun.with.code", [AutoSuggestOption::focus(51.424387
 print_r($result);
 ```
 
+#### Code Example #3
+
+Validate what3words
+
+```php
+$result = $api->isPossible3wa("filled.count.soap");
+print_r($result); // yields 1
+
+$result = $api->isPossible3wa("not a 3wa");
+print_r($result); // yields 0
+
+$result = $api->findPossible3wa('from "index.home.raft" to " "filled.count.soap"');
+print_r(implode(", ", $result)); // yields "index.home.raft, filled.count.soap"
+
+$result = $api->isValid3wa('filled.count.soapp');
+print_r($result ? $result : 'invalid'); // yields 'invalid'
+
+```
+
 ## Handling Errors
 
-All the functions will return an stdClass Object containing the requested data, or on failure, they will return `false`.  If `false` is returned, call `get_error()`, and it will return an associative array containing a `code` value and a `message` value.
+All the functions will return an stdClass Object containing the requested data, or on failure, they will return `false`. If `false` is returned, call `get_error()`, and it will return an associative array containing a `code` value and a `message` value.
 
 ```php
 print_r($api->getError());
 ```
 
-Error values are listed in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#error-handling). 
+Error values are listed in the [what3words REST API documentation](https://docs.what3words.com/api/v3/#error-handling).
 
+## Development (using Docker)
+
+You can see `w3w-php-wrapper` in action by running `docker compose watch` (make sure you're running this from the `development` directory) and open http://localhost:9000 on your browser. Any changes you make to the source code will be reloaded as you refresh your browser, just ensure you have loaded your environment variable named: `W3W_API_KEY` by running `export W3W_API_KEY=<YOUR_API_KEY>`.
+
+```sh
+$ export W3W_API_KEY=KEYFROMW3W
+$ docker compose watch
+[+] Building 0.6s (18/18) FINISHED
+[+] Running 1/1
+ ✔ Container php-server  Started                                                                                     0.0s
+Watch configuration for service "server":
+  - Action sync for path "/w3w-php-wrapper/development/src"
+  - Action sync for path "/w3w-php-wrapper/src"
+  - Action sync for path "/w3w-php-wrapper/tests"
+```
+
+### Running tests (using Docker)
+
+Once you've spin up the container, you can run `docker exec php-server /var/www/html/vendor/bin/phpunit` to execute the unit tests.
+
+```
+$ docker exec php-server /var/www/html/vendor/bin/phpunit
+PHPUnit 5.5.4 by Sebastian Bergmann and contributors.
+
+......................                                            22 / 22 (100%)
+
+Time: 1.57 seconds, Memory: 3.25MB
+
+OK (22 tests, 25 assertions)
+```
