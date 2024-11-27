@@ -17,10 +17,9 @@ namespace What3words\Geocoder;
 
 class Geocoder
 {
-
   private $version = "3.4.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
   private $apiKey = "";
-  private $error = false;
+  private $error = [];
   private $baseUrl = 'https://api.what3words.com/v3/';
   private $header = "what3words-PHP/x.x.x (PHP x.x.x; OS x.x.x)";
 
@@ -45,7 +44,7 @@ class Geocoder
   // - parameter format: Return data format type; can be one of json (the default) or geojson
   public function convertTo3wa($latitude, $longitude, $language = "en", $format = "json")
   {
-    return $this->performRequest("convert-to-3wa", array("coordinates" => "$latitude,$longitude", "language" => $language, "format" => $format));
+    return $this->performRequest("convert-to-3wa", ["coordinates" => "$latitude,$longitude", "language" => $language, "format" => $format]);
   }
 
   // Convert a 3 word address to a latitude and longitude.
@@ -53,7 +52,7 @@ class Geocoder
   // - parameter format: Return data format type; can be one of json (the default) or geojson
   public function convertToCoordinates($words, $format = "json")
   {
-    return $this->performRequest("convert-to-coordinates", array("words" => $words, "format" => $format));
+    return $this->performRequest("convert-to-coordinates", ["words" => $words, "format" => $format]);
   }
 
   // Returns a section of the 3m x 3m what3words grid for a given area.
@@ -61,13 +60,13 @@ class Geocoder
   // - parameter format: Return data format type; can be one of json (the default) or geojson Example value:format=Format.json
   public function gridSection($south_lat, $west_lng, $north_lat, $east_lng, $format = "json")
   {
-    return $this->performRequest("grid-section", array("bounding-box" => "$south_lat,$west_lng,$north_lat,$east_lng", "format" => $format));
+    return $this->performRequest("grid-section", ["bounding-box" => "$south_lat,$west_lng,$north_lat,$east_lng", "format" => $format]);
   }
 
   // Retrieves a list all available 3 word address languages, including the ISO 639-1 2 letter code, english name and native name.
   public function availableLanguages()
   {
-    return $this->performRequest("available-languages", array());
+    return $this->performRequest("available-languages", []);
   }
 
   // AutoSuggest can take a slightly incorrect 3 word address, and suggest a list of valid 3 word addresses.
@@ -84,9 +83,9 @@ class Geocoder
   // - option AutoSuggestOption::bounding_polygon(array(lat,lng, lat,lng, ...)): Restrict autosuggest results to a polygon, specified by a comma-separated list of lat,lng pairs. The polygon should be closed, i.e. the first element should be repeated as the last element; also the list should contain at least 4 entries. The API is currently limited to accepting up to 25 pairs. Example value: "51.521,-0.343,52.6,2.3324,54.234,8.343,51.521,-0.343"
   // - option AutoSuggestOption::input_type(): For power users, used to specify voice input mode. Can be text (default), vocon-hybrid, nmdp-asr or generic-voice. See voice recognition section for more details.
   // - option AutoSuggestOption::fallback_language(): For normal text input, specifies a fallback language, which will help guide AutoSuggest if the input is particularly messy. If specified, this parameter must be a supported 3 word address language as an ISO 639-1 2 letter code. For voice input (see voice section), language must always be specified.
-  public function autosuggest($input, $options = array())
+  public function autosuggest($input, $options = [])
   {
-    $parameters = array("input" => $input);
+    $parameters = ["input" => $input];
 
     foreach ($options as $option) {
       $parameters = array_merge($parameters, $option);
@@ -112,7 +111,7 @@ class Geocoder
     if (count($matches) === 1) {
       return $matches[0];
     }
-    return array();
+    return [];
   }
 
   // Determines if the string passed in is a real three word address.
@@ -120,13 +119,15 @@ class Geocoder
   // Returns 1 if valid, 0 if not
   public function isValid3wa($input)
   {
-    if ($this->isPossible3wa($input) == 1) {
-      $result = $this->autosuggest($input, [AutoSuggestOption::numberResults(1)]);
-      if (count($result["suggestions"]) == 1 && $result["suggestions"][0]["words"] == $input) {
-        return 1;
-      }
-    } else {
-      return 0;
+    switch ($this->isPossible3wa($input)) {
+      case 1:
+        $result = $this->autosuggest($input, [AutoSuggestOption::numberResults(1)]);
+        if (count($result["suggestions"]) == 1 && $result["suggestions"][0]["words"] == $input) {
+          return 1;
+        }
+        break;
+      default:
+        return 0;
     }
   }
 
@@ -139,7 +140,7 @@ class Geocoder
     $parameters["key"] = $this->apiKey;
 
     // make an array out of the dictionary so that each element is a key value pair glued together with an '=', and urlencode the parameters
-    $param_array = array();
+    $param_array = [];
     foreach ($parameters as $key => $value) {
       $param_array[] = "$key=" . urlencode($value);
     }
@@ -155,7 +156,6 @@ class Geocoder
     $json = $this->call($url);
 
     $data = json_decode($json, true);
-
     if (isset($data["error"])) {
       $this->error["code"] = $data["error"]["code"];
       $this->error["message"] = $data["error"]["message"];
@@ -173,7 +173,7 @@ class Geocoder
 
     // set the options
     curl_setopt($handle, CURLOPT_URL, $url);
-    curl_setopt($handle, CURLOPT_HTTPHEADER, array("X-W3W-Wrapper: " . $this->header));
+    curl_setopt($handle, CURLOPT_HTTPHEADER, ["X-W3W-Wrapper: {$this->header}"]);
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($handle, CURLOPT_ENCODING, "");
     curl_setopt($handle, CURLOPT_MAXREDIRS, 10);
@@ -202,56 +202,56 @@ class AutoSuggestOption
 {
   public static function fallbackLanguage($language)
   {
-    return array("language" => "$language");
+    return ["language" => $language];
   }
 
   public static function numberResults($number_of_results)
   {
-    return array("n-results" => "$number_of_results");
+    return ["n-results" => $number_of_results];
   }
 
   public static function focus($latitude, $longitude)
   {
-    return array("focus" => "$latitude,$longitude");
+    return ["focus" => "$latitude,$longitude"];
   }
 
   public static function numberFocusResults($number_focus_results)
   {
-    return array("n-focus-results" => "$number_focus_results");
+    return ["n-focus-results" => $number_focus_results];
   }
 
   public static function inputType($input_type)
   {
-    return array("input-type" => "$input_type");
+    return ["input-type" => $input_type];
   }
 
   public static function preferLand($land)
   {
     if ($land) {
-      return array("prefer-land" => "true");
+      return ["prefer-land" => "true"];
     } else {
-      return array("prefer-land" => "false");
+      return ["prefer-land" => "false"];
     }
   }
 
   public static function clipToCountry($country)
   {
-    return array("clip-to-country" => "$country");
+    return ["clip-to-country" => $country];
   }
 
   public static function clipToCircle($latitude, $longitude, $radius)
   {
-    return array("clip-to-circle" => "$latitude,$longitude,$radius");
+    return ["clip-to-circle" => "$latitude,$longitude,$radius"];
   }
 
   public static function clipToBoundingBox($south_lat, $west_lng, $north_lat, $east_lng)
   {
-    return array("clip-to-bounding-box" => "$south_lat,$west_lng,$north_lat,$east_lng");
+    return ["clip-to-bounding-box" => "$south_lat,$west_lng,$north_lat,$east_lng"];
   }
 
-  public static function clipToPolygon($points = array())
+  public static function clipToPolygon($points = [])
   {
-    return array("clip-to-polygon" => implode(",", $points));
+    return ["clip-to-polygon" => implode(",", $points)];
   }
 
 }
