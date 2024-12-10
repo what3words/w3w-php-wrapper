@@ -39,6 +39,20 @@ use What3words\Geocoder\AutoSuggestOption;
 $api = new Geocoder("<Secret API Key>");
 ```
 
+#### Options
+
+You can also provide header values and referer (for restricted API keys).
+
+```php
+use What3words\Geocoder\Geocoder;
+use What3words\Geocoder\GeocoderOptions;
+
+$options = GeocoderOptions::referer("https://my.site.com/*")->headers(["X-Custom-Header: my.site.com"]);
+
+$api = new Geocoder("<Secret API Key>", $options);
+
+```
+
 ## Convert To Coordinates
 
 Convert a 3 word address to a position, expressed as coordinates of latitude and longitude.

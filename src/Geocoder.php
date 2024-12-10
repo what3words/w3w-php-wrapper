@@ -5,30 +5,38 @@
  *
  * @author Gary Gale <gary@what3words.com>
  * @author Dave Duprey <support@what3words.com>
- * @copyright 2016, 2017 what3words Ltd
+ * @author Frederick lee <support@what3words.com>
+ * @copyright 2016, 2017, 2024 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.4.1
+ * @version 3.5.0
  * @package What3words\Geocoder
  */
 
 namespace What3words\Geocoder;
 
-
 class Geocoder
 {
-  private $version = "3.4.1";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
+  private $version = "3.5.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
   private $apiKey = "";
   private $error = [];
-  private $baseUrl = 'https://api.what3words.com/v3/';
-  private $header = "what3words-PHP/x.x.x (PHP x.x.x; OS x.x.x)";
+  private $baseUrl = "https://api.what3words.com/v3/";
+  private $wrapper = "what3words-PHP/x.x.x (PHP x.x.x; OS x.x.x)";
+  private $referer = null;
+  private $headers = [];
 
   // To construct this you need API key.  You can get one here: https://accounts.what3words.com/en/register/
   // - parameter apiKey: What3Words api key
-  public function __construct($apiKey)
+  // - parameter options: Geocoder options
+  public function __construct($apiKey, GeocoderOptions $options = null)
   {
     $this->apiKey = $apiKey;
-    $this->header = "what3words-PHP/" . $this->version . " (PHP " . phpversion() . "; " . php_uname("s") . " " . php_uname("r") . ")";
+    $this->wrapper = "what3words-PHP/" . $this->version . " (PHP " . phpversion() . "; " . php_uname("s") . " " . php_uname("r") . ")";
+    if ($options) {
+      $this->headers = $options->getHeaders();
+      $this->referer = $options->getReferer() ?: $this->referer;
+      $this->baseUrl = $options->getBaseUrl() ?: $this->baseUrl;
+    }
   }
 
 
@@ -136,26 +144,20 @@ class Geocoder
   // Prepare the call to the API server
   private function performRequest($command, $parameters)
   {
-    // add the apikey to the parameters
-    $parameters["key"] = $this->apiKey;
-
     // make an array out of the dictionary so that each element is a key value pair glued together with an '=', and urlencode the parameters
     $param_array = [];
     foreach ($parameters as $key => $value) {
       $param_array[] = "$key=" . urlencode($value);
     }
-    $param_array[] = "$key=" . urlencode($value);
 
     // glue the array together unto a string with elements connected with '&'
     $params = implode("&", $param_array);
 
     // put the whole URL together now
-    $url = $this->baseUrl . $command . "?" . $params;
+    $url = "{$this->baseUrl}{$command}?{$params}";
 
-    // cal the server
-    $json = $this->call($url);
-
-    $data = json_decode($json, true);
+    // call the server
+    $data = $this->call($url);
     if (isset($data["error"])) {
       $this->error["code"] = $data["error"]["code"];
       $this->error["message"] = $data["error"]["message"];
@@ -171,31 +173,79 @@ class Geocoder
   {
     $handle = curl_init();
 
+    $headers = array_merge(["X-W3W-Wrapper: {$this->wrapper}", "X-API-Key: {$this->apiKey}"], $this->headers);
     // set the options
     curl_setopt($handle, CURLOPT_URL, $url);
-    curl_setopt($handle, CURLOPT_HTTPHEADER, ["X-W3W-Wrapper: {$this->header}"]);
+    curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($handle, CURLOPT_ENCODING, "");
     curl_setopt($handle, CURLOPT_MAXREDIRS, 10);
     curl_setopt($handle, CURLOPT_TIMEOUT, 30);
-    curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
     curl_setopt($handle, CURLOPT_CUSTOMREQUEST, "GET");
-
+    if (!empty($this->referer)) {
+      curl_setopt($handle, CURLOPT_REFERER, $this->referer);
+    }
     // make the call
     $output = curl_exec($handle);
     if (!$output) {
       $this->error["code"] = "BadConnection";
       $this->error["message"] = curl_error($handle);
     }
-
     curl_close($handle);
-
-    // return the json
-    return $output;
+    $json = json_decode($output, true);
+    return $json ?: false;
   }
-
 }
 
+class GeocoderOptions
+{
+  private static $instance = null;
+  private $baseUrl = null;
+  private $referer = null;
+  private $headers = [];
+
+  private function __construct()
+  {
+  }
+  private static function getInstance()
+  {
+    if (self::$instance === null) {
+      self::$instance = new self();
+    }
+    return self::$instance;
+  }
+  public static function host($host)
+  {
+    $instance = self::getInstance();
+    $instance->host = $host;
+    return $instance;
+  }
+  public static function referer($referer)
+  {
+    $instance = self::getInstance();
+    $instance->referer = $referer;
+    return $instance;
+  }
+  public static function headers(array $headers)
+  {
+    $instance = self::getInstance();
+    $instance->headers = $headers;
+    return $instance;
+  }
+  public function getBaseUrl()
+  {
+    return $this->baseUrl;
+  }
+  public function getReferer()
+  {
+    return $this->referer;
+  }
+  public function getHeaders()
+  {
+    return $this->headers;
+  }
+}
 
 // These are static helper functions that creates options (as array) to be passed into autosuggest
 class AutoSuggestOption
