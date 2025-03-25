@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.5.0
+ * @version 3.5.1
  * @package What3words\Geocoder\Test
  */
 

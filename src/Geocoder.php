@@ -9,7 +9,7 @@
  * @copyright 2016, 2017, 2024 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.5.0
+ * @version 3.5.1
  * @package What3words\Geocoder
  */
 
@@ -17,7 +17,7 @@ namespace What3words\Geocoder;
 
 class Geocoder
 {
-  private $version = "3.5.0";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
+  private $version = "3.5.1";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
   private $apiKey = "";
   private $error = [];
   private $baseUrl = "https://api.what3words.com/v3/";
@@ -181,7 +181,11 @@ class Geocoder
     curl_setopt($handle, CURLOPT_ENCODING, "");
     curl_setopt($handle, CURLOPT_MAXREDIRS, 10);
     curl_setopt($handle, CURLOPT_TIMEOUT, 30);
-    curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+    if (defined('CURL_HTTP_VERSION_2_0')) {
+      curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+    } else {
+      curl_setopt($handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    }
     curl_setopt($handle, CURLOPT_CUSTOMREQUEST, "GET");
     if (!empty($this->referer)) {
       curl_setopt($handle, CURLOPT_REFERER, $this->referer);
