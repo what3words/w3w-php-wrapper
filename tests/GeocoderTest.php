@@ -23,7 +23,7 @@ class GeocoderTest extends TestCase
 {
     protected $geocoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->geocoder = new Geocoder(getenv('W3W_API_KEY'));
     }

@@ -2,7 +2,7 @@ services:
   server:
     container_name: php-server
     build:
-      context: ..
+      context: ../
       dockerfile: ./development/Dockerfile
       target: development
     ports:
