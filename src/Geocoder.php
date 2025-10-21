@@ -28,7 +28,7 @@ class Geocoder
   // To construct this you need API key.  You can get one here: https://accounts.what3words.com/en/register/
   // - parameter apiKey: What3Words api key
   // - parameter options: Geocoder options
-  public function __construct($apiKey, GeocoderOptions $options = null)
+  public function __construct($apiKey, ?GeocoderOptions $options = null)
   {
     $this->apiKey = $apiKey;
     $this->wrapper = "what3words-PHP/" . $this->version . " (PHP " . phpversion() . "; " . php_uname("s") . " " . php_uname("r") . ")";
