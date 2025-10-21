@@ -9,7 +9,7 @@
  * @copyright 2016, 2017, 2024 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.5.1
+ * @version 3.5.2
  * @package What3words\Geocoder
  */
 
@@ -17,7 +17,7 @@ namespace What3words\Geocoder;
 
 class Geocoder
 {
-  private $version = "3.5.1";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
+  private $version = "3.5.2";  // if changing this, remember to change the comment block at the top, and match everything with the git tag
   private $apiKey = "";
   private $error = [];
   private $baseUrl = "https://api.what3words.com/v3/";
