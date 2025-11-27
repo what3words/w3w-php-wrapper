@@ -1,12 +1,13 @@
-FROM --platform=linux/amd64 composer:1.10.0 AS dev-deps
+FROM --platform=linux/amd64 php:7.4-apache AS dev-deps
+COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
+RUN apt-get update && apt-get install -y zip
 RUN --mount=type=bind,source=./composer.json,target=composer.json \
   --mount=type=bind,source=./composer.lock,target=composer.lock \
   --mount=type=cache,target=/tmp/cache \
   composer install --no-interaction
 
-FROM --platform=linux/amd64 php:5.6-apache AS base
-RUN docker-php-ext-install pdo pdo_mysql
+FROM --platform=linux/amd64 php:7.4-apache AS base
 RUN echo 'alias phpunit="/var/www/html/vendor/bin/phpunit"' >> ~/.bashrc
 
 COPY ./src /var/www/html

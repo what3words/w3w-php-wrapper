@@ -7,7 +7,7 @@
  * @copyright 2016, 2017 what3words Ltd
  * @link http://developer.what3words.com
  * @license MIT
- * @version 3.5.1
+ * @version 3.5.2
  * @package What3words\Geocoder\Test
  */
 
@@ -23,7 +23,7 @@ class GeocoderTest extends TestCase
 {
     protected $geocoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->geocoder = new Geocoder(getenv('W3W_API_KEY'));
     }
